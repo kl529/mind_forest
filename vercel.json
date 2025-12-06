@@ -3,5 +3,11 @@
   "outputDirectory": "dist",
   "framework": null,
   "installCommand": "npm install",
-  "devCommand": "npx expo start --web"
+  "devCommand": "npx expo start --web",
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ]
 }
