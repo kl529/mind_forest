@@ -4,10 +4,10 @@
   "framework": null,
   "installCommand": "npm install",
   "devCommand": "npx expo start --web",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "/"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
