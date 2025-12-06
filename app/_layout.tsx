@@ -12,16 +12,21 @@ import { ThemedText } from '@/components/ThemedText';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
+  const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (loaded) {
-      checkAuth();
+    // Check auth immediately, don't wait for fonts on web
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      console.error('Font loading error:', error);
     }
-  }, [loaded]);
+  }, [error]);
 
   const checkAuth = async () => {
     const authed = await SupabaseService.isAuthenticated();
@@ -33,11 +38,11 @@ export default function RootLayout() {
     }
   };
 
-  if (!loaded || isAuthenticated === null) {
-    // Show loading screen instead of blank
+  // Only wait for auth check, not fonts (fonts can load in background)
+  if (isAuthenticated === null) {
     return (
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colorScheme === 'dark' ? '#000' : '#fff' }}>
           <ThemedText>Loading...</ThemedText>
         </View>
       </ThemeProvider>
