@@ -15,7 +15,9 @@ export default function AuthScreen() {
 
   const handleSignIn = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please enter email and password');
+      if (typeof window !== 'undefined') {
+        window.alert('Please enter email and password');
+      }
       return;
     }
 
@@ -26,33 +28,35 @@ export default function AuthScreen() {
       if (error) {
         // If user doesn't exist, create account
         if (error.message.includes('Invalid login credentials')) {
-          Alert.alert(
-            'Create Account?',
-            'No account found. Would you like to create one?',
-            [
-              { text: 'Cancel', style: 'cancel' },
-              {
-                text: 'Create',
-                onPress: async () => {
-                  const { error: signUpError } = await SupabaseService.signUp(email, password);
-                  if (signUpError) {
-                    Alert.alert('Error', signUpError.message);
-                  } else {
-                    Alert.alert('Success!', 'Account created. Please check your email to verify.');
-                    router.replace('/(tabs)');
-                  }
-                },
-              },
-            ]
-          );
+          const shouldCreate = typeof window !== 'undefined'
+            ? window.confirm('No account found. Would you like to create one?')
+            : false;
+
+          if (shouldCreate) {
+            const { error: signUpError } = await SupabaseService.signUp(email, password);
+            if (signUpError) {
+              if (typeof window !== 'undefined') {
+                window.alert(`Error: ${signUpError.message}`);
+              }
+            } else {
+              if (typeof window !== 'undefined') {
+                window.alert('Account created successfully!');
+              }
+              router.replace('/(tabs)');
+            }
+          }
         } else {
-          Alert.alert('Error', error.message);
+          if (typeof window !== 'undefined') {
+            window.alert(`Error: ${error.message}`);
+          }
         }
       } else {
         router.replace('/(tabs)');
       }
     } catch (error: any) {
-      Alert.alert('Error', error.message);
+      if (typeof window !== 'undefined') {
+        window.alert(`Error: ${error.message}`);
+      }
     } finally {
       setLoading(false);
     }
