@@ -3,10 +3,12 @@ import { useFonts } from 'expo-font';
 import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { SupabaseService } from '@/services/supabaseService';
+import { ThemedText } from '@/components/ThemedText';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -32,7 +34,14 @@ export default function RootLayout() {
   };
 
   if (!loaded || isAuthenticated === null) {
-    return null;
+    // Show loading screen instead of blank
+    return (
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ThemedText>Loading...</ThemedText>
+        </View>
+      </ThemeProvider>
+    );
   }
 
   return (
