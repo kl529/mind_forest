@@ -29,9 +29,12 @@ export default function AuthScreen() {
         // For testing: ignore email confirmation error
         if (error.message.includes('Email not confirmed')) {
           if (typeof window !== 'undefined') {
-            window.alert('Note: Email not confirmed, but logging in for testing...');
+            const confirmed = window.confirm('Email not confirmed. Continue anyway for testing?');
+            if (confirmed) {
+              // Force navigation even without proper session
+              window.location.href = '/(tabs)';
+            }
           }
-          router.replace('/(tabs)');
           return;
         }
 
