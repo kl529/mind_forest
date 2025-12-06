@@ -1,50 +1,119 @@
-# Welcome to your Expo app 👋
+# Mind Forest - Stress Management App 🌱
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native/Expo app that helps users manage stress through visual terrarium feedback and activity tracking.
 
-## Get started
+## 🎯 Problem Definition
 
-1. Install dependencies
+### Target Problem
+Mind Forest addresses three critical challenges faced by stressed adults:
 
+1. **Awareness Gap**: Users don't recognize how stressed they are or their current mental state
+2. **Solution Gap**: Users are aware of their stress but don't know how to address it
+3. **Action Gap**: Users know what to do but struggle to consistently practice stress relief
+
+### Target Users
+
+**Primary Target**: Stressed adults in their 20s
+- People who haven't yet developed effective stress management techniques
+- Recently started working, facing workplace and interpersonal stress
+- Experiencing mild fatigue and psychosomatic symptoms
+- Recognize "I'm having a hard time" but don't know what to do next
+
+**Secondary Target**: Late 20s - Mid 30s adults still developing stress management skills
+
+**Persona**: A, mid-20s professional
+- Recently started working
+- Stress accumulating from work and relationships
+- Experiencing mild helplessness and physical symptoms
+- Thinks "things are tough lately" but unsure how to cope
+
+### Current Market Landscape
+- **Alternative Apps**: Limited adoption of stress management apps in Korea
+- **Professional Help**: Psychological counseling not widely accessible or normalized
+- **Gap**: Need for an approachable, non-clinical tool for daily stress management
+
+## Features
+
+### 🏠 Main Screen (Home Tab)
+- **Terrarium Visualization**: Dynamic terrarium that changes based on your stress levels
+- **Stress Notifications**: Contextual stress management tips based on current levels
+- **Quick Entry**: + button opens input modal for logging activities
+
+### 📅 Calendar Screen 
+- **Monthly View**: Navigate through months with left/right arrows
+- **Color-coded Days**: Visual stress level indicators
+  - **Blue tones** (3 levels): Good stress days - lighter to darker blue
+  - **Red tones** (3 levels): High stress days - lighter to darker red
+- **Daily Stress Tracking**: See patterns in your stress levels over time
+
+### 📊 Statistics Screen
+- **Monthly Trends**: Line graphs showing stress levels and stress relief activities
+- **Historical Comparison**: Previous month data shown in lighter colors
+- **Visual Analytics**: Track your progress over time
+
+### ➕ Input Screen (Bottom Sheet)
+- **Activity Selection**: Choose from stress or stress-relief categories
+  - Walking, Sleep issues, Reading, etc.
+- **Intensity Scale**: 1-5 intensity slider
+- **Notes**: Free-form text for additional context
+- **Save/Cancel**: Persist or discard entries
+
+## Tech Stack
+- **Framework**: Expo/React Native
+- **Language**: TypeScript
+- **Navigation**: Expo Router + React Navigation
+- **Styling**: React Native StyleSheet with theming
+- **Platform**: iOS, Android, Web
+
+## Development Setup
+
+1. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+2. Start development server:
    ```bash
-   npx expo start
+   npm start
    ```
 
-In the output, you'll find options to open the app in a
+3. Run on platforms:
+   ```bash
+   npm run ios     # iOS Simulator
+   npm run android # Android Emulator  
+   npm run web     # Web browser
+   ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Code Quality
+- Run linting: `npm run lint`
+- TypeScript strict mode enabled
+- Component-based architecture with theming support
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Project Structure
+```
+app/
+├── (tabs)/           # Tab navigation screens
+│   ├── index.tsx     # Home screen
+│   ├── calendar.tsx  # Calendar screen
+│   └── stats.tsx     # Statistics screen
+├── _layout.tsx       # Root layout
+└── +not-found.tsx    # 404 page
 
-## Get a fresh project
+components/           # Reusable components
+├── ui/              # Platform-specific UI components
+├── TerrariumView.tsx # Main terrarium visualization
+├── InputModal.tsx    # Activity input modal
+└── StressIndicator.tsx # Visual stress indicators
 
-When you're ready, run:
-
-```bash
-npm run reset-project
+types/               # TypeScript type definitions
+└── index.ts         # App-wide type definitions
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## App Flow
+1. **Launch** → Home screen with terrarium
+2. **Log Activity** → Tap + button → Fill input form → Save
+3. **View History** → Calendar tab → See color-coded stress days
+4. **Analyze Trends** → Statistics tab → View monthly progress
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+Built with ❤️ using Expo and React Native
