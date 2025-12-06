@@ -1,6 +1,6 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack, router } from 'expo-router';
+import { Stack, router, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
@@ -12,6 +12,7 @@ import { ThemedText } from '@/components/ThemedText';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const segments = useSegments();
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -28,14 +29,24 @@ export default function RootLayout() {
     }
   }, [error]);
 
+  // Handle navigation based on auth state
+  useEffect(() => {
+    if (isAuthenticated === null) return; // Still loading
+
+    const inAuthGroup = segments[0] === 'auth';
+
+    if (!isAuthenticated && !inAuthGroup) {
+      // Not authenticated and not on auth screen -> redirect to auth
+      router.replace('/auth');
+    } else if (isAuthenticated && inAuthGroup) {
+      // Authenticated but on auth screen -> redirect to home
+      router.replace('/(tabs)');
+    }
+  }, [isAuthenticated, segments]);
+
   const checkAuth = async () => {
     const authed = await SupabaseService.isAuthenticated();
     setIsAuthenticated(authed);
-
-    // Navigate based on auth status
-    if (!authed) {
-      router.replace('/auth');
-    }
   };
 
   // Only wait for auth check, not fonts (fonts can load in background)
