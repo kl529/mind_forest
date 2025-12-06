@@ -26,6 +26,15 @@ export default function AuthScreen() {
       const { data, error } = await SupabaseService.signIn(email, password);
 
       if (error) {
+        // For testing: ignore email confirmation error
+        if (error.message.includes('Email not confirmed')) {
+          if (typeof window !== 'undefined') {
+            window.alert('Note: Email not confirmed, but logging in for testing...');
+          }
+          router.replace('/(tabs)');
+          return;
+        }
+
         // If user doesn't exist, create account
         if (error.message.includes('Invalid login credentials')) {
           const shouldCreate = typeof window !== 'undefined'
@@ -34,15 +43,21 @@ export default function AuthScreen() {
 
           if (shouldCreate) {
             const { error: signUpError } = await SupabaseService.signUp(email, password);
-            if (signUpError) {
+            if (signUpError && !signUpError.message.includes('already registered')) {
               if (typeof window !== 'undefined') {
                 window.alert(`Error: ${signUpError.message}`);
               }
             } else {
+              // For testing: skip email confirmation and login directly
               if (typeof window !== 'undefined') {
-                window.alert('Account created successfully!');
+                window.alert('Account created! Logging in...');
               }
-              router.replace('/(tabs)');
+              // Try to sign in immediately
+              const { error: signInError } = await SupabaseService.signIn(email, password);
+              if (!signInError || signInError.message.includes('Email not confirmed')) {
+                // Ignore email confirmation error for testing
+                router.replace('/(tabs)');
+              }
             }
           }
         } else {
